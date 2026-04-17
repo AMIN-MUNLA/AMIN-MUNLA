@@ -1,45 +1,43 @@
 # Senior Companion Check-In Planner (DA219B)
 
-Senior Companion Check-In Planner helps family members and volunteers track check-ins with older adults so they can follow wellbeing trends and catch support needs early.
+## Problem Statement (required in DA219B)
+This app helps family members and volunteers log check-ins with older adults so wellbeing changes can be tracked early and support actions can be planned.
 
-## Day 1 goals completed
-- Chosen a personal, non-generic domain and frozen MVP scope.
-- Set up React (Vite) frontend and Express backend.
-- Added one-command startup with `concurrently`.
-- Added `.env.example` files and secret-safe `.gitignore`.
-- Drafted ERD and validation targets in `docs/erd.md`.
-- Created backend Router -> Controller -> Model skeleton for `CheckInVisit`.
+## Stack (required by DA219B)
+- Frontend: React (Vite)
+- Backend: Express.js
+- Database: MongoDB Atlas
+- One-command startup: `concurrently` via root `npm run dev`
 
-## Scope guardrails (strict)
-- Build only DA219B required features.
-- No authentication in v1.
-- No payments, notifications, chat, or admin dashboard.
-- Prioritize realistic seed data, explainability, and deployability.
-
-## Project structure
-- `frontend/` React (Vite) client.
-- `backend/` Express API.
-- `docs/` ERD and architecture notes.
-
-## Quick start (under 5 minutes)
-1. Copy environment templates:
-   - `backend/.env.example` -> `backend/.env`
-   - `frontend/.env.example` -> `frontend/.env`
+## Run In Under 5 Minutes (teacher verification)
+1. Clone and open the project:
+   - `git clone <your-repo-url>`
+   - `cd da219b-senior-checkin-clean`
 2. Install dependencies:
-   - `cd frontend && npm install`
-   - `cd ../backend && npm install`
-   - `cd .. && npm install`
-3. Start both apps:
+   - `npm install`
+   - `npm install --prefix backend`
+   - `npm install --prefix frontend`
+3. Create environment files:
+   - `Copy-Item backend/.env.example backend/.env`
+   - `Copy-Item frontend/.env.example frontend/.env`
+4. Set your Atlas URI in `backend/.env`:
+   - `MONGODB_URI=your_atlas_connection_string`
+5. Run both backend and frontend with one command:
    - `npm run dev`
 
-Frontend default URL: `http://localhost:5173`  
-Backend health URL: `http://localhost:5000/api/health`
+## Local URLs
+- Frontend: `http://localhost:5173`
+- Backend health check: `http://localhost:5000/api/health`
 
-## Day-by-day plan
-- Day 1: Setup + scope + ERD (done)
-- Day 2: MongoDB schemas + realistic seed data
-- Day 3-5: API CRUD + relational + custom endpoints
-- Day 6-7: React CRUD UI + loading/error + interactive feature
-- Day 8: Deploy + production config
-- Day 9: Report writing
-- Day 10: Seminar live-change drills
+## Architecture (teacher verification)
+- Backend follows Router -> Controller -> Model pattern.
+- Backend files are in `backend/src/routes`, `backend/src/controllers`, `backend/src/models`.
+- Frontend files are in `frontend/src`.
+
+## Current Progress
+- Day 1 complete: setup, structure, README baseline, and ERD draft.
+- Day 2+ will add schemas, realistic seed data, full CRUD, relational endpoints, and custom endpoint.
+
+## Security Rule (automatic-fail prevention)
+- No secrets are committed to Git.
+- Use `.env` files only.
