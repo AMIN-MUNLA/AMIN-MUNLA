@@ -35,8 +35,17 @@ This app helps family members and volunteers log check-ins with older adults so 
 - Frontend files are in `frontend/src`.
 
 ## Current Progress
-- Day 1 complete: setup, structure, README baseline, and ERD draft.
-- Day 2+ will add schemas, realistic seed data, full CRUD, relational endpoints, and custom endpoint.
+- Day 1 complete: setup, structure, README baseline.
+- Day 2 complete: three validated collections (`seniors`, `companions`, `checkinvisits`) and realistic seed script.
+- Next: full CRUD, relational endpoints, and custom stats endpoint.
+
+## Seed Data (teacher verification)
+- Dry validation without DB writes:
+  - `npm run seed:dry-run --prefix backend`
+- Seed Atlas after adding `MONGODB_URI`:
+  - `npm run seed --prefix backend`
+- Drop DB and reseed:
+  - `npm run seed:drop --prefix backend`
 
 ## Security Rule (automatic-fail prevention)
 - No secrets are committed to Git.

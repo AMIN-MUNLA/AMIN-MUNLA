@@ -4,7 +4,10 @@
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "seed": "node src/scripts/seed.js",
+    "seed:drop": "node src/scripts/seed.js --drop",
+    "seed:dry-run": "node src/scripts/seed.js --dry-run"
   },
   "keywords": [],
   "author": "",
