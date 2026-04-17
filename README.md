@@ -12,7 +12,7 @@ This app helps family members and volunteers log check-ins with older adults so 
 ## Run In Under 5 Minutes (teacher verification)
 1. Clone and open the project:
    - `git clone <your-repo-url>`
-   - `cd da219b-senior-checkin-clean`
+   - `cd <repository-folder-name>`
 2. Install dependencies:
    - `npm install`
    - `npm install --prefix backend`
@@ -37,7 +37,8 @@ This app helps family members and volunteers log check-ins with older adults so 
 ## Current Progress
 - Day 1 complete: setup, structure, README baseline.
 - Day 2 complete: three validated collections (`seniors`, `companions`, `checkinvisits`) and realistic seed script.
-- Next: full CRUD, relational endpoints, and custom stats endpoint.
+- Day 3 complete: full CRUD for `check-in-visits` with input validation and consistent JSON errors.
+- Next: relational endpoints, custom stats endpoint, and React CRUD UI.
 
 ## Seed Data (teacher verification)
 - Dry validation without DB writes:
