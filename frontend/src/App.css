@@ -1,0 +1,47 @@
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7a4e21;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0.3rem 0 0.4rem;
+  color: #1f2937;
+}
+
+.subtitle {
+  margin: 0;
+  color: #4b5563;
+}
+
+.day-box {
+  background: #ffffff;
+  border: 1px solid #e4d9cc;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  text-align: left;
+}
+
+.day-box h2 {
+  margin: 0 0 0.6rem;
+  color: #2f3c4f;
+}
+
+.day-box ul,
+.day-box ol {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: #334155;
+  line-height: 1.6;
+}
