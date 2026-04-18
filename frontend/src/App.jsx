@@ -40,6 +40,7 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [createErrorMessage, setCreateErrorMessage] = useState("");
+  const [backgroundRefreshError, setBackgroundRefreshError] = useState("");
   const [lastLoadedAt, setLastLoadedAt] = useState("");
 
   const loadVisits = useCallback(async ({ signal, withLoading } = {}) => {
@@ -52,11 +53,16 @@ function App() {
       const data = await fetchCheckInVisits({ signal });
       setVisits(data);
       setLastLoadedAt(new Date().toISOString());
+      setBackgroundRefreshError("");
     } catch (error) {
       if (error.name === "AbortError") {
         return;
       }
-      setErrorMessage(error.message || "Could not load check-in visits.");
+      if (withLoading) {
+        setErrorMessage(error.message || "Could not load check-in visits.");
+      } else {
+        setBackgroundRefreshError("Auto-refresh failed. Please refresh manually.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -113,6 +119,16 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      loadVisits({ withLoading: false });
+    }, 45000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [loadVisits]);
+
   return (
     <main className="app-shell">
       <header>
@@ -122,6 +138,15 @@ function App() {
           Real visit data from Express + MongoDB Atlas shown in React.
         </p>
       </header>
+
+      {backgroundRefreshError ? (
+        <p className="warning-text">{backgroundRefreshError}</p>
+      ) : null}
+      {!isReferenceLoading && (seniors.length === 0 || companions.length === 0) ? (
+        <p className="warning-text">
+          Missing reference data. Run backend seed data for full create-form demo.
+        </p>
+      ) : null}
 
       <CheckInVisitForm
         seniors={seniors}

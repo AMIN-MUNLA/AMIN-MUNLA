@@ -119,12 +119,16 @@ function CheckInVisitForm({
       return;
     }
 
-    await onCreateVisit(buildPayload(formState));
-    setFormState({
-      ...buildInitialFormState(),
-      checkInDate: formatDateInputValue(new Date()),
-    });
-    setValidationMessage("");
+    try {
+      await onCreateVisit(buildPayload(formState));
+      setFormState({
+        ...buildInitialFormState(),
+        checkInDate: formatDateInputValue(new Date()),
+      });
+      setValidationMessage("");
+    } catch {
+      // Form-level error is shown from parent via submitError.
+    }
   };
 
   return (
@@ -138,6 +142,11 @@ function CheckInVisitForm({
 
       {validationMessage && <p className="error-text">Error: {validationMessage}</p>}
       {submitError && <p className="error-text">Error: {submitError}</p>}
+      {seniors.length === 0 || companions.length === 0 ? (
+        <p className="warning-text">
+          Add seed data first so the form can load seniors and companions.
+        </p>
+      ) : null}
 
       <form onSubmit={handleSubmit} className="form-grid">
         <label>
