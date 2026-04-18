@@ -38,7 +38,18 @@ This app helps family members and volunteers log check-ins with older adults so 
 - Day 1 complete: setup, structure, README baseline.
 - Day 2 complete: three validated collections (`seniors`, `companions`, `checkinvisits`) and realistic seed script.
 - Day 3 complete: full CRUD for `check-in-visits` with input validation and consistent JSON errors.
-- Next: relational endpoints, custom stats endpoint, and React CRUD UI.
+- Day 4 complete: relational endpoints + custom mood summary endpoint with strict query validation.
+- Next: React CRUD UI.
+
+## API Endpoints (Day 4)
+- `GET /api/check-in-visits` (filters: `seniorId`, `companionId`, `visitType`, `followUpRequired`, `minMood`, `maxMood`)
+- `GET /api/check-in-visits/:id`
+- `POST /api/check-in-visits`
+- `PUT /api/check-in-visits/:id`
+- `DELETE /api/check-in-visits/:id`
+- `GET /api/seniors/:id/check-ins` (relational endpoint)
+- `GET /api/companions/:id/check-ins` (relational endpoint)
+- `GET /api/stats/mood-summary` (custom endpoint, optional `visitType`, `startDate`, `endDate`)
 
 ## Seed Data (teacher verification)
 - Dry validation without DB writes:
