@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const CheckInVisit = require("../models/checkInVisit.model");
+const Companion = require("../models/companion.model");
+const Senior = require("../models/senior.model");
+
+const visitTypeValues = ["call", "home_visit", "video_call"];
 
 function parseBooleanQuery(value) {
   if (value === "true") {
@@ -16,6 +20,55 @@ function populateQuery(query) {
   return query
     .populate("seniorId", "fullName city supportLevel")
     .populate("companionId", "fullName relationshipType preferredLanguage");
+}
+
+async function ensureReferenceExists(Model, id, entityLabel, fieldName) {
+  if (!mongoose.isValidObjectId(id)) {
+    return {
+      status: 400,
+      error: "Bad Request",
+      message: `${fieldName} must be a valid ObjectId.`,
+    };
+  }
+
+  const exists = await Model.exists({ _id: id });
+  if (!exists) {
+    return {
+      status: 404,
+      error: "Not Found",
+      message: `${entityLabel} was not found for ${fieldName}.`,
+    };
+  }
+
+  return null;
+}
+
+async function validateReferencesFromBody(body) {
+  if (Object.prototype.hasOwnProperty.call(body, "seniorId")) {
+    const seniorError = await ensureReferenceExists(
+      Senior,
+      body.seniorId,
+      "Senior",
+      "seniorId"
+    );
+    if (seniorError) {
+      return seniorError;
+    }
+  }
+
+  if (Object.prototype.hasOwnProperty.call(body, "companionId")) {
+    const companionError = await ensureReferenceExists(
+      Companion,
+      body.companionId,
+      "Companion",
+      "companionId"
+    );
+    if (companionError) {
+      return companionError;
+    }
+  }
+
+  return null;
 }
 
 exports.listCheckInVisits = async (req, res, next) => {
@@ -45,6 +98,12 @@ exports.listCheckInVisits = async (req, res, next) => {
     }
 
     if (visitType) {
+      if (!visitTypeValues.includes(visitType)) {
+        return res.status(400).json({
+          error: "Bad Request",
+          message: "visitType must be one of: call, home_visit, video_call.",
+        });
+      }
       filters.visitType = visitType;
     }
 
@@ -121,6 +180,14 @@ exports.getCheckInVisitById = async (req, res, next) => {
 
 exports.createCheckInVisit = async (req, res, next) => {
   try {
+    const referenceError = await validateReferencesFromBody(req.body);
+    if (referenceError) {
+      return res.status(referenceError.status).json({
+        error: referenceError.error,
+        message: referenceError.message,
+      });
+    }
+
     const visit = await CheckInVisit.create(req.body);
     const populatedVisit = await populateQuery(CheckInVisit.findById(visit._id));
     return res.status(201).json(populatedVisit);
@@ -136,6 +203,14 @@ exports.updateCheckInVisit = async (req, res, next) => {
       return res.status(400).json({
         error: "Bad Request",
         message: "Invalid check-in visit id.",
+      });
+    }
+
+    const referenceError = await validateReferencesFromBody(req.body);
+    if (referenceError) {
+      return res.status(referenceError.status).json({
+        error: referenceError.error,
+        message: referenceError.message,
       });
     }
 
