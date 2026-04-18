@@ -1,67 +1,81 @@
 # Senior Companion Check-In Planner (DA219B)
 
-## Problem Statement (required in DA219B)
-This app helps family members and volunteers log check-ins with older adults so wellbeing changes can be tracked early and support actions can be planned.
+## Project Summary
+This fullstack app helps families and volunteers log wellbeing check-ins for older adults and track follow-up needs over time.
 
-## Stack (required by DA219B)
-- Frontend: React (Vite)
+## Tech Stack
+- Frontend: React + Vite
 - Backend: Express.js
 - Database: MongoDB Atlas
-- One-command startup: `concurrently` via root `npm run dev`
+- Startup: one command from root (`npm run dev`)
 
-## Run In Under 5 Minutes (teacher verification)
-1. Clone and open the project:
+## Why This Project Is Strong (Exam + Jobs)
+- Clear backend architecture: Router -> Controller -> Model
+- Realistic relational data model: `seniors`, `companions`, `checkinvisits`
+- Robust validation and error handling for API input
+- Full CRUD foundation with relational and custom stats endpoints
+- React frontend connected to real API with loading and error UX
+- Clean incremental Git history with small daily commits
+
+## Run In Under 5 Minutes
+1. Clone and open:
    - `git clone <your-repo-url>`
    - `cd <repository-folder-name>`
 2. Install dependencies:
    - `npm install`
    - `npm install --prefix backend`
    - `npm install --prefix frontend`
-3. Create environment files:
+3. Create env files:
    - `Copy-Item backend/.env.example backend/.env`
    - `Copy-Item frontend/.env.example frontend/.env`
-4. Set your Atlas URI in `backend/.env`:
+4. Add Atlas connection string in `backend/.env`:
    - `MONGODB_URI=your_atlas_connection_string`
-5. Run both backend and frontend with one command:
+5. Start backend + frontend:
    - `npm run dev`
 
 ## Local URLs
 - Frontend: `http://localhost:5173`
-- Backend health check: `http://localhost:5000/api/health`
+- Backend health: `http://localhost:5000/api/health`
 
-## Architecture (teacher verification)
-- Backend follows Router -> Controller -> Model pattern.
-- Backend files are in `backend/src/routes`, `backend/src/controllers`, `backend/src/models`.
-- Frontend files are in `frontend/src`.
+## Architecture
+- Backend code:
+  - `backend/src/routes`
+  - `backend/src/controllers`
+  - `backend/src/models`
+- Frontend code:
+  - `frontend/src`
 
-## Current Progress
-- Day 1 complete: setup, structure, README baseline.
-- Day 2 complete: three validated collections (`seniors`, `companions`, `checkinvisits`) and realistic seed script.
-- Day 3 complete: full CRUD for `check-in-visits` with input validation and consistent JSON errors.
-- Day 4 complete: relational endpoints + custom mood summary endpoint with strict query validation.
-- Day 5 complete: React list + controlled create form connected to backend API with loading/error UX.
-- Next: React update/delete actions and final deploy/report prep.
-
-## API Endpoints (Day 5)
-- `GET /api/seniors` (list seniors for UI forms)
-- `GET /api/companions` (list companions for UI forms)
-- `GET /api/check-in-visits` (filters: `seniorId`, `companionId`, `visitType`, `followUpRequired`, `minMood`, `maxMood`)
+## API Endpoints
+- `GET /api/seniors`
+- `GET /api/companions`
+- `GET /api/check-in-visits`
 - `GET /api/check-in-visits/:id`
 - `POST /api/check-in-visits`
 - `PUT /api/check-in-visits/:id`
 - `DELETE /api/check-in-visits/:id`
-- `GET /api/seniors/:id/check-ins` (relational endpoint)
-- `GET /api/companions/:id/check-ins` (relational endpoint)
-- `GET /api/stats/mood-summary` (custom endpoint, optional `visitType`, `startDate`, `endDate`)
+- `GET /api/seniors/:id/check-ins`
+- `GET /api/companions/:id/check-ins`
+- `GET /api/stats/mood-summary`
 
-## Seed Data (teacher verification)
-- Dry validation without DB writes:
+## Seed Data
+- Validate seed data only:
   - `npm run seed:dry-run --prefix backend`
-- Seed Atlas after adding `MONGODB_URI`:
+- Seed Atlas:
   - `npm run seed --prefix backend`
-- Drop DB and reseed:
+- Drop and reseed:
   - `npm run seed:drop --prefix backend`
 
-## Security Rule (automatic-fail prevention)
-- No secrets are committed to Git.
-- Use `.env` files only.
+## Current Progress
+- Day 1: setup and structure
+- Day 2: schemas + realistic seed data
+- Day 3: CRUD + request validation
+- Day 4: relational + custom stats endpoints
+- Day 5: React list + controlled create form
+
+## Security
+- Secrets are not committed to Git
+- Environment variables are handled through `.env` files
+
+## Author
+- MHD Amin Munla
+- GitHub: `AMIN-MUNLA`
