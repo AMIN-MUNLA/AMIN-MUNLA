@@ -23,3 +23,35 @@ export async function fetchCheckInVisits({ signal } = {}) {
   }
   return response.json();
 }
+
+export async function fetchSeniors({ signal } = {}) {
+  const response = await fetch(`${API_ROOT}/seniors`, { signal });
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+  return response.json();
+}
+
+export async function fetchCompanions({ signal } = {}) {
+  const response = await fetch(`${API_ROOT}/companions`, { signal });
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+  return response.json();
+}
+
+export async function createCheckInVisit(payload) {
+  const response = await fetch(`${API_ROOT}/check-in-visits`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+
+  return response.json();
+}

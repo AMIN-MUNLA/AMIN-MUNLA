@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { fetchCheckInVisits } from "./api/checkInVisitsApi";
+import {
+  createCheckInVisit,
+  fetchCheckInVisits,
+  fetchCompanions,
+  fetchSeniors,
+} from "./api/checkInVisitsApi";
+import CheckInVisitForm from "./components/CheckInVisitForm";
 import "./App.css";
 
 function formatDate(dateValue) {
@@ -27,8 +33,13 @@ function getName(value, fallback) {
 
 function App() {
   const [visits, setVisits] = useState([]);
+  const [seniors, setSeniors] = useState([]);
+  const [companions, setCompanions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isReferenceLoading, setIsReferenceLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [createErrorMessage, setCreateErrorMessage] = useState("");
   const [lastLoadedAt, setLastLoadedAt] = useState("");
 
   const loadVisits = useCallback(async ({ signal, withLoading } = {}) => {
@@ -51,21 +62,50 @@ function App() {
     }
   }, []);
 
+  const handleCreateVisit = useCallback(
+    async (payload) => {
+      setIsSubmitting(true);
+      setCreateErrorMessage("");
+
+      try {
+        await createCheckInVisit(payload);
+        await loadVisits({ withLoading: true });
+      } catch (error) {
+        setCreateErrorMessage(error.message || "Could not create check-in visit.");
+        throw error;
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [loadVisits]
+  );
+
   useEffect(() => {
     const controller = new AbortController();
-    fetchCheckInVisits({ signal: controller.signal })
-      .then((data) => {
-        setVisits(data);
+
+    Promise.all([
+      fetchCheckInVisits({ signal: controller.signal }),
+      fetchSeniors({ signal: controller.signal }),
+      fetchCompanions({ signal: controller.signal }),
+    ])
+      .then(([visitData, seniorData, companionData]) => {
+        setVisits(visitData);
+        setSeniors(seniorData);
+        setCompanions(companionData);
         setLastLoadedAt(new Date().toISOString());
       })
       .catch((error) => {
         if (error.name === "AbortError") {
           return;
         }
-        setErrorMessage(error.message || "Could not load check-in visits.");
+        setErrorMessage(
+          error.message ||
+            "Could not load initial dashboard data. Check backend connection."
+        );
       })
       .finally(() => {
         setIsLoading(false);
+        setIsReferenceLoading(false);
       });
 
     return () => {
@@ -83,6 +123,14 @@ function App() {
         </p>
       </header>
 
+      <CheckInVisitForm
+        seniors={seniors}
+        companions={companions}
+        isSubmitting={isSubmitting}
+        submitError={createErrorMessage}
+        onCreateVisit={handleCreateVisit}
+      />
+
       <section className="panel">
         <div className="panel-header">
           <div>
@@ -96,7 +144,7 @@ function App() {
           <button
             type="button"
             onClick={() => loadVisits({ withLoading: true })}
-            disabled={isLoading}
+            disabled={isLoading || isReferenceLoading}
             className="secondary-button"
           >
             {isLoading ? "Loading..." : "Refresh"}

@@ -66,10 +66,74 @@ h2 {
   cursor: wait;
 }
 
+.primary-button {
+  border: 1px solid #a05d1c;
+  background: #b45309;
+  color: #ffffff;
+  padding: 0.55rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 .error-text {
   margin: 0.5rem 0 0.8rem;
   color: #b42318;
   font-weight: 600;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  border: 1px solid #d2c2b4;
+  border-radius: 8px;
+  padding: 0.48rem 0.6rem;
+  font: inherit;
+  color: #111827;
+  background: #fffdfb;
+}
+
+.form-grid input:disabled,
+.form-grid select:disabled {
+  background: #f9f6f2;
+  cursor: not-allowed;
+}
+
+.checkbox-label {
+  align-self: end;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.4rem !important;
+}
+
+.checkbox-label input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.full-width {
+  grid-column: 1 / -1;
 }
 
 .table-wrapper {
@@ -92,4 +156,15 @@ td {
 th {
   color: #314155;
   font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }

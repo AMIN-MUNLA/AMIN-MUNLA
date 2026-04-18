@@ -3,6 +3,19 @@ const mongoose = require("mongoose");
 const CheckInVisit = require("../models/checkInVisit.model");
 const Senior = require("../models/senior.model");
 
+exports.listSeniors = async (_req, res, next) => {
+  try {
+    const seniors = await Senior.find()
+      .select("fullName city supportLevel preferredContactTime")
+      .sort({ fullName: 1 })
+      .lean();
+
+    return res.status(200).json(seniors);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 exports.listSeniorCheckIns = async (req, res, next) => {
   try {
     const { id } = req.params;

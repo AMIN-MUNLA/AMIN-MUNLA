@@ -3,6 +3,19 @@ const mongoose = require("mongoose");
 const CheckInVisit = require("../models/checkInVisit.model");
 const Companion = require("../models/companion.model");
 
+exports.listCompanions = async (_req, res, next) => {
+  try {
+    const companions = await Companion.find()
+      .select("fullName relationshipType preferredLanguage active")
+      .sort({ fullName: 1 })
+      .lean();
+
+    return res.status(200).json(companions);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 exports.listCompanionCheckIns = async (req, res, next) => {
   try {
     const { id } = req.params;
