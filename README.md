@@ -71,6 +71,7 @@ This fullstack app helps families and volunteers log wellbeing check-ins for old
 - Day 3: CRUD + request validation
 - Day 4: relational + custom stats endpoints
 - Day 5: React list + controlled create form
+- Day 6: React update and delete actions with confirmation and edit mode
 
 ## Security
 - Secrets are not committed to Git
