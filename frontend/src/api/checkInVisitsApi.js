@@ -55,3 +55,31 @@ export async function createCheckInVisit(payload) {
 
   return response.json();
 }
+
+export async function updateCheckInVisit(id, payload) {
+  const response = await fetch(`${API_ROOT}/check-in-visits/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+
+  return response.json();
+}
+
+export async function deleteCheckInVisit(id) {
+  const response = await fetch(`${API_ROOT}/check-in-visits/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+
+  return response.json();
+}

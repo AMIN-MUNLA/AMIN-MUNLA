@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 
 import {
   createCheckInVisit,
+  deleteCheckInVisit,
   fetchCheckInVisits,
   fetchCompanions,
   fetchSeniors,
+  updateCheckInVisit,
 } from "./api/checkInVisitsApi";
 import CheckInVisitForm from "./components/CheckInVisitForm";
 import "./App.css";
@@ -38,10 +40,13 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isReferenceLoading, setIsReferenceLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingVisitId, setDeletingVisitId] = useState("");
+  const [editingVisitId, setEditingVisitId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [createErrorMessage, setCreateErrorMessage] = useState("");
+  const [submitErrorMessage, setSubmitErrorMessage] = useState("");
   const [backgroundRefreshError, setBackgroundRefreshError] = useState("");
   const [lastLoadedAt, setLastLoadedAt] = useState("");
+  const editingVisit = visits.find((visit) => visit._id === editingVisitId) || null;
 
   const loadVisits = useCallback(async ({ signal, withLoading } = {}) => {
     if (withLoading) {
@@ -71,19 +76,75 @@ function App() {
   const handleCreateVisit = useCallback(
     async (payload) => {
       setIsSubmitting(true);
-      setCreateErrorMessage("");
+      setSubmitErrorMessage("");
 
       try {
         await createCheckInVisit(payload);
         await loadVisits({ withLoading: true });
       } catch (error) {
-        setCreateErrorMessage(error.message || "Could not create check-in visit.");
+        setSubmitErrorMessage(
+          error.message || "Could not create check-in visit."
+        );
         throw error;
       } finally {
         setIsSubmitting(false);
       }
     },
     [loadVisits]
+  );
+
+  const handleUpdateVisit = useCallback(
+    async (payload) => {
+      if (!editingVisitId) {
+        return;
+      }
+
+      setIsSubmitting(true);
+      setSubmitErrorMessage("");
+
+      try {
+        await updateCheckInVisit(editingVisitId, payload);
+        setEditingVisitId("");
+        await loadVisits({ withLoading: true });
+      } catch (error) {
+        setSubmitErrorMessage(
+          error.message || "Could not update check-in visit."
+        );
+        throw error;
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [editingVisitId, loadVisits]
+  );
+
+  const handleDeleteVisit = useCallback(
+    async (visit) => {
+      const shouldDelete = window.confirm(
+        "Delete this check-in visit? This action cannot be undone."
+      );
+
+      if (!shouldDelete) {
+        return;
+      }
+
+      setDeletingVisitId(visit._id);
+      setErrorMessage("");
+      setSubmitErrorMessage("");
+
+      try {
+        await deleteCheckInVisit(visit._id);
+        if (editingVisitId === visit._id) {
+          setEditingVisitId("");
+        }
+        await loadVisits({ withLoading: true });
+      } catch (error) {
+        setErrorMessage(error.message || "Could not delete check-in visit.");
+      } finally {
+        setDeletingVisitId("");
+      }
+    },
+    [editingVisitId, loadVisits]
   );
 
   useEffect(() => {
@@ -132,7 +193,7 @@ function App() {
   return (
     <main className="app-shell">
       <header>
-        <p className="eyebrow">DA219B Day 5 - React API Integration</p>
+        <p className="eyebrow">DA219B Day 6 - Edit and Delete UI</p>
         <h1>Senior Companion Check-In Planner</h1>
         <p className="subtitle">
           Real visit data from Express + MongoDB Atlas shown in React.
@@ -149,11 +210,15 @@ function App() {
       ) : null}
 
       <CheckInVisitForm
+        key={editingVisitId || "create-mode"}
         seniors={seniors}
         companions={companions}
         isSubmitting={isSubmitting}
-        submitError={createErrorMessage}
+        submitError={submitErrorMessage}
+        editVisit={editingVisit}
         onCreateVisit={handleCreateVisit}
+        onUpdateVisit={handleUpdateVisit}
+        onCancelEdit={() => setEditingVisitId("")}
       />
 
       <section className="panel">
@@ -193,6 +258,7 @@ function App() {
                   <th>Type</th>
                   <th>Mood</th>
                   <th>Follow-up</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -204,6 +270,27 @@ function App() {
                     <td>{visit.visitType}</td>
                     <td>{visit.moodAfterVisit}/5</td>
                     <td>{visit.followUpRequired ? "Yes" : "No"}</td>
+                    <td className="row-actions">
+                      <button
+                        type="button"
+                        className="secondary-button action-button"
+                        onClick={() => {
+                          setSubmitErrorMessage("");
+                          setEditingVisitId(visit._id);
+                        }}
+                        disabled={isSubmitting || deletingVisitId === visit._id}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="danger-button action-button"
+                        onClick={() => handleDeleteVisit(visit)}
+                        disabled={isSubmitting || deletingVisitId === visit._id}
+                      >
+                        {deletingVisitId === visit._id ? "Deleting..." : "Delete"}
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

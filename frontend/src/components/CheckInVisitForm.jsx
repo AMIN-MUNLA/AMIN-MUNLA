@@ -29,6 +29,19 @@ function buildInitialFormState() {
   };
 }
 
+function getObjectId(value) {
+  if (!value) {
+    return "";
+  }
+  if (typeof value === "string") {
+    return value;
+  }
+  if (typeof value === "object" && value._id) {
+    return value._id;
+  }
+  return "";
+}
+
 function formatDateInputValue(date) {
   if (!date) {
     return "";
@@ -45,6 +58,21 @@ function formatDateInputValue(date) {
   const hours = String(now.getHours()).padStart(2, "0");
   const minutes = String(now.getMinutes()).padStart(2, "0");
   return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+function buildFormStateFromVisit(visit) {
+  return {
+    seniorId: getObjectId(visit?.seniorId),
+    companionId: getObjectId(visit?.companionId),
+    checkInDate: formatDateInputValue(visit?.checkInDate),
+    visitType: visit?.visitType || "call",
+    moodAfterVisit: String(visit?.moodAfterVisit ?? 3),
+    durationMinutes: String(visit?.durationMinutes ?? 30),
+    supportAction: visit?.supportAction || "none",
+    followUpRequired: Boolean(visit?.followUpRequired),
+    followUpDueDate: formatDateInputValue(visit?.followUpDueDate),
+    notes: visit?.notes || "",
+  };
 }
 
 function validateForm(formState) {
@@ -86,11 +114,19 @@ function CheckInVisitForm({
   companions,
   isSubmitting,
   submitError,
+  editVisit,
   onCreateVisit,
+  onUpdateVisit,
+  onCancelEdit,
 }) {
+  const isEditMode = Boolean(editVisit);
   const [formState, setFormState] = useState(() => ({
-    ...buildInitialFormState(),
-    checkInDate: formatDateInputValue(new Date()),
+    ...(isEditMode
+      ? buildFormStateFromVisit(editVisit)
+      : {
+          ...buildInitialFormState(),
+          checkInDate: formatDateInputValue(new Date()),
+        }),
   }));
   const [validationMessage, setValidationMessage] = useState("");
 
@@ -120,11 +156,15 @@ function CheckInVisitForm({
     }
 
     try {
-      await onCreateVisit(buildPayload(formState));
-      setFormState({
-        ...buildInitialFormState(),
-        checkInDate: formatDateInputValue(new Date()),
-      });
+      if (isEditMode) {
+        await onUpdateVisit(buildPayload(formState));
+      } else {
+        await onCreateVisit(buildPayload(formState));
+        setFormState({
+          ...buildInitialFormState(),
+          checkInDate: formatDateInputValue(new Date()),
+        });
+      }
       setValidationMessage("");
     } catch {
       // Form-level error is shown from parent via submitError.
@@ -135,8 +175,12 @@ function CheckInVisitForm({
     <section className="panel">
       <div className="panel-header">
         <div>
-          <h2>Create Check-In Visit</h2>
-          <p className="muted">Controlled React form connected to POST API.</p>
+          <h2>{isEditMode ? "Edit Check-In Visit" : "Create Check-In Visit"}</h2>
+          <p className="muted">
+            {isEditMode
+              ? "Update an existing visit with the same controlled form."
+              : "Controlled React form connected to POST API."}
+          </p>
         </div>
       </div>
 
@@ -290,8 +334,24 @@ function CheckInVisitForm({
             className="primary-button"
             disabled={isSubmitting || seniors.length === 0 || companions.length === 0}
           >
-            {isSubmitting ? "Creating..." : "Create Visit"}
+            {isSubmitting
+              ? isEditMode
+                ? "Updating..."
+                : "Creating..."
+              : isEditMode
+                ? "Update Visit"
+                : "Create Visit"}
           </button>
+          {isEditMode ? (
+            <button
+              type="button"
+              className="secondary-button inline-button"
+              onClick={onCancelEdit}
+              disabled={isSubmitting}
+            >
+              Cancel Edit
+            </button>
+          ) : null}
         </div>
       </form>
     </section>
