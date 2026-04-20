@@ -104,6 +104,8 @@ This fullstack app helps families and volunteers log wellbeing check-ins for old
 
 ## Presentation Notes
 - Day 7 Zoom checklist: `docs/day7-demo-checklist.md`
+- Simple seminar essay: `docs/simple-seminar-essay.md`
+- Simple restart roadmap: `docs/simple-restart-plan.md`
 
 ## Author
 - MHD Amin Munla
