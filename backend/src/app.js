@@ -1,6 +1,7 @@
 const cors = require("cors");
 const express = require("express");
 
+const errorHandler = require("./middleware/errorHandler");
 const apiRouter = require("./routes");
 
 const app = express();
@@ -22,7 +23,10 @@ app.use((req, res) => {
   res.status(404).json({
     error: "Not Found",
     message: `No route found for ${req.method} ${req.originalUrl}`,
+    details: null,
   });
 });
+
+app.use(errorHandler);
 
 module.exports = app;
