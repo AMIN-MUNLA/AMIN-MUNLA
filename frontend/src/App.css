@@ -25,6 +25,11 @@ h2 {
   color: #2f3c4f;
 }
 
+h3 {
+  margin: 0;
+  color: #334155;
+}
+
 .subtitle {
   margin: 0;
   color: #4b5563;
@@ -114,6 +119,36 @@ h2 {
   gap: 0.8rem;
 }
 
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.filter-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.filter-grid input,
+.filter-grid select {
+  border: 1px solid #d2c2b4;
+  border-radius: 8px;
+  padding: 0.48rem 0.6rem;
+  font: inherit;
+  color: #111827;
+  background: #fffdfb;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .form-grid label {
   display: flex;
   flex-direction: column;
@@ -165,6 +200,58 @@ h2 {
   overflow-x: auto;
 }
 
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.stat-card {
+  border: 1px solid #e5d8ca;
+  border-radius: 10px;
+  padding: 0.7rem;
+  background: #fffaf5;
+}
+
+.stat-label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #5b6472;
+}
+
+.stat-value {
+  margin: 0.3rem 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.summary-columns {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.summary-list {
+  list-style: none;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.summary-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  border-bottom: 1px solid #f0e7de;
+  padding-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -203,9 +290,26 @@ th {
     grid-template-columns: 1fr;
   }
 
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .inline-button {
     margin-left: 0;
     margin-top: 0.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-columns {
+    grid-template-columns: 1fr;
   }
 
   .row-actions {

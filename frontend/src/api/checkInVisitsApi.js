@@ -3,6 +3,25 @@ const API_BASE_URL =
 
 const API_ROOT = `${API_BASE_URL}/api`;
 
+function buildQueryString(filters = {}) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (
+      value === undefined ||
+      value === null ||
+      value === "" ||
+      Number.isNaN(value)
+    ) {
+      return;
+    }
+    params.set(key, String(value));
+  });
+
+  const query = params.toString();
+  return query ? `?${query}` : "";
+}
+
 async function readApiError(response) {
   try {
     const data = await response.json();
@@ -16,8 +35,22 @@ async function readApiError(response) {
   return `Request failed (${response.status}).`;
 }
 
-export async function fetchCheckInVisits({ signal } = {}) {
-  const response = await fetch(`${API_ROOT}/check-in-visits`, { signal });
+export async function fetchCheckInVisits({ signal, filters } = {}) {
+  const queryString = buildQueryString(filters);
+  const response = await fetch(`${API_ROOT}/check-in-visits${queryString}`, {
+    signal,
+  });
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+  return response.json();
+}
+
+export async function fetchMoodSummary({ signal, filters } = {}) {
+  const queryString = buildQueryString(filters);
+  const response = await fetch(`${API_ROOT}/stats/mood-summary${queryString}`, {
+    signal,
+  });
   if (!response.ok) {
     throw new Error(await readApiError(response));
   }
