@@ -5,7 +5,7 @@ function App() {
     <main className="app-shell">
       <header>
         <p className="eyebrow">DA219B Fullstack Lab</p>
-        <h1>Senior Companion Check-In Planner</h1>
+        <h1>GoldenCare Senior Check-In</h1>
         <p className="subtitle">
           Track wellness check-ins for older adults with clear follow-up and
           explainable data flow.

@@ -1,6 +1,6 @@
-# Senior Companion Check-In Planner (DA219B)
+# GoldenCare Senior Check-In (DA219B)
 
-Senior Companion Check-In Planner helps family members and volunteers track check-ins with older adults so they can follow wellbeing trends and catch support needs early.
+GoldenCare Senior Check-In helps family members and volunteers track check-ins with older adults so they can follow wellbeing trends and catch support needs early.
 
 ## Day 1 goals completed
 - Chosen a personal, non-generic domain and frozen MVP scope.

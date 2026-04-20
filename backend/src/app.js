@@ -11,7 +11,7 @@ app.use(express.json());
 app.get("/api/health", (_req, res) => {
   res.json({
     status: "ok",
-    project: "Senior Companion Check-In Planner",
+    project: "GoldenCare Senior Check-In",
     timestamp: new Date().toISOString(),
   });
 });

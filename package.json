@@ -1,8 +1,8 @@
 {
-  "name": "da219b-senior-checkin-planner",
+  "name": "da219b-goldencare-checkin",
   "version": "1.0.0",
   "private": true,
-  "description": "DA219B fullstack lab project: Senior Companion Check-In Planner",
+  "description": "DA219B fullstack lab project: GoldenCare Senior Check-In",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
     "dev:backend": "npm run dev --prefix backend",
