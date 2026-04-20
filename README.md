@@ -50,8 +50,23 @@ Backend health URL: `http://localhost:5000/api/health`
 ## Day-by-day plan
 - Day 1: Setup + scope + ERD (done)
 - Day 2: MongoDB schemas + realistic seed data (done)
-- Day 3-5: API CRUD + relational + custom endpoints
-- Day 6-7: React CRUD UI + loading/error + interactive feature
+- Day 3: Full CRUD for `check-in-visits` + consistent error format
+- Day 4: Relational endpoints + custom stats endpoint
+- Day 5: Add custom domain field `medicationTaken` to `CheckInVisit` + update validation and seed data
+- Day 6: React CRUD UI + loading/error states + auto-refresh every 30s using `setInterval` with cleanup in `useEffect` return
+- Day 7: Interactive feature defined: search by senior name + filter by visit type/date range
 - Day 8: Deploy + production config
-- Day 9: Report writing
+- Day 9: Report writing + include two commit hashes showing feature first version and improved refactor version
 - Day 10: Seminar live-change drills
+
+## Teacher-critical checkpoints (must not miss)
+- Auto-refresh requirement:
+  - Visits list refreshes with `setInterval`.
+  - Interval is cleared on unmount in `useEffect` cleanup.
+- Custom field requirement:
+  - `CheckInVisit.medicationTaken` (boolean) is required and validated.
+- Interactive feature requirement:
+  - Day 7 will deliver search + filter (not vague UI work).
+- Git iteration requirement:
+  - One feature will be committed in a simple first version, then improved in a second commit.
+  - Both commit hashes will be referenced in the final report.
