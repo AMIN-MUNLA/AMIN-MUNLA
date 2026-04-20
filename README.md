@@ -17,21 +17,26 @@ This fullstack app helps families and volunteers log wellbeing check-ins for old
 - React frontend connected to real API with loading and error UX
 - Clean incremental Git history with small daily commits
 
-## Run In Under 5 Minutes
-1. Clone and open:
+## Run In Under 5 Minutes (Teacher Demo)
+1. Clone and open project:
    - `git clone <your-repo-url>`
    - `cd <repository-folder-name>`
-2. Install dependencies:
+2. Install dependencies (root + workspaces):
    - `npm install`
    - `npm install --prefix backend`
    - `npm install --prefix frontend`
-3. Create env files:
+3. Create environment files:
    - `Copy-Item backend/.env.example backend/.env`
    - `Copy-Item frontend/.env.example frontend/.env`
-4. Add Atlas connection string in `backend/.env`:
+4. Set MongoDB Atlas connection in `backend/.env`:
    - `MONGODB_URI=your_atlas_connection_string`
-5. Start backend + frontend:
+5. (Recommended for first run) seed realistic data:
+   - `npm run seed --prefix backend`
+6. Start full app (frontend + backend):
    - `npm run dev`
+7. Verify quickly:
+   - Frontend: `http://localhost:5173`
+   - Health: `http://localhost:5000/api/health`
 
 ## Local URLs
 - Frontend: `http://localhost:5173`
