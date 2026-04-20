@@ -11,6 +11,7 @@ erDiagram
       string city
       string contactPhone
       string supportLevel
+      string preferredCheckInWindow
     }
     COMPANIONS {
       objectId _id
@@ -34,4 +35,5 @@ erDiagram
 - `CheckInVisit.moodAfterVisit`: required, number, min 1, max 5.
 - `CheckInVisit.visitType`: required enum (`call`, `home_visit`, `video_call`).
 - `Senior.supportLevel`: required enum (`low`, `medium`, `high`).
+- `Senior.preferredCheckInWindow`: required enum (`morning`, `afternoon`, `evening`).
 - `Companion.relationshipType`: required enum (for example `family`, `volunteer`, `caregiver`).
