@@ -65,14 +65,33 @@ This fullstack app helps families and volunteers log wellbeing check-ins for old
 - Drop and reseed:
   - `npm run seed:drop --prefix backend`
 
-## Current Progress
-- Day 1: setup and structure
-- Day 2: schemas + realistic seed data
-- Day 3: CRUD + request validation
-- Day 4: relational + custom stats endpoints
-- Day 5: React list + controlled create form
-- Day 6: React update and delete actions with confirmation and edit mode
-- Day 7: React filter controls + mood summary dashboard using custom endpoint
+## Current Progress (Teacher Verification)
+- Day 1 complete:
+  - Project setup and folder structure (`frontend`, `backend`, `docs`)
+  - One-command startup from root (`npm run dev`)
+- Day 2 complete:
+  - Three validated collections: `seniors`, `companions`, `checkinvisits`
+  - Realistic seed script with dry-run and reseed support
+- Day 3 complete:
+  - Full CRUD for main entity (`/api/check-in-visits`)
+  - Request validation middleware and consistent JSON error handling
+- Day 4 complete:
+  - Relational endpoints: `/api/seniors/:id/check-ins`, `/api/companions/:id/check-ins`
+  - Custom endpoint: `/api/stats/mood-summary`
+  - Review fixes applied:
+    - Reference IDs checked before create/update (Senior + Companion)
+    - Invalid `visitType` query returns `400`
+- Day 5 complete:
+  - React list view + controlled create form connected to real API
+  - Loading/error states for create/list flow
+- Day 6 complete:
+  - Edit mode (prefilled controlled form) + update flow
+  - Delete action with user confirmation and refresh
+- Day 7 complete:
+  - Filter controls for visits table
+  - Mood summary dashboard synchronized with filter state
+- Next (Day 8-10 planned):
+  - Deployment setup, final report polish, and seminar rehearsal checklist
 
 ## Security
 - Secrets are not committed to Git
