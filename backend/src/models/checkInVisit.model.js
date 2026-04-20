@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { VISIT_TYPES } = require("../constants/checkInVisit.constants");
 
 const checkInVisitSchema = new mongoose.Schema(
   {
@@ -15,16 +16,24 @@ const checkInVisitSchema = new mongoose.Schema(
     checkInDate: {
       type: Date,
       required: true,
+      validate: {
+        validator: (value) => value <= new Date(),
+        message: "checkInDate cannot be in the future.",
+      },
     },
     visitType: {
       type: String,
-      enum: ["call", "home_visit", "video_call"],
+      enum: VISIT_TYPES,
       required: true,
     },
     moodAfterVisit: {
       type: Number,
       min: 1,
       max: 5,
+      required: true,
+    },
+    medicationTaken: {
+      type: Boolean,
       required: true,
     },
     notes: {
