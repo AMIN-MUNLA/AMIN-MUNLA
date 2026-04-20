@@ -1,6 +1,8 @@
 const CheckInVisit = require("../models/checkInVisit.model");
-
-const visitTypeValues = ["call", "home_visit", "video_call"];
+const {
+  VISIT_TYPES,
+  joinAllowedValues,
+} = require("../constants/checkInVisit.constants");
 
 function parseDateQueryParam(value) {
   if (!value) {
@@ -24,10 +26,10 @@ exports.getMoodSummary = async (req, res, next) => {
     const match = {};
 
     if (visitType) {
-      if (!visitTypeValues.includes(visitType)) {
+      if (!VISIT_TYPES.includes(visitType)) {
         return res.status(400).json({
           error: "Bad Request",
-          message: "visitType must be one of: call, home_visit, video_call.",
+          message: `visitType must be one of: ${joinAllowedValues(VISIT_TYPES)}.`,
         });
       }
       match.visitType = visitType;

@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+const {
+  SUPPORT_ACTIONS,
+  VISIT_TYPES,
+  joinAllowedValues,
+} = require("../constants/checkInVisit.constants");
 
 const allowedFields = [
   "seniorId",
@@ -20,15 +25,6 @@ const requiredCreateFields = [
   "visitType",
   "moodAfterVisit",
   "durationMinutes",
-];
-
-const visitTypeValues = ["call", "home_visit", "video_call"];
-const supportActionValues = [
-  "none",
-  "medicine_reminder",
-  "grocery_help",
-  "appointment_booking",
-  "emergency_contact",
 ];
 
 function isPlainObject(value) {
@@ -88,8 +84,10 @@ function validatePayloadBody(body, requireAllFields) {
     }
   }
 
-  if ("visitType" in body && !visitTypeValues.includes(body.visitType)) {
-    errors.push("visitType must be one of: call, home_visit, video_call.");
+  if ("visitType" in body && !VISIT_TYPES.includes(body.visitType)) {
+    errors.push(
+      `visitType must be one of: ${joinAllowedValues(VISIT_TYPES)}.`
+    );
   }
 
   if ("moodAfterVisit" in body) {
@@ -108,10 +106,10 @@ function validatePayloadBody(body, requireAllFields) {
 
   if (
     "supportAction" in body &&
-    !supportActionValues.includes(body.supportAction)
+    !SUPPORT_ACTIONS.includes(body.supportAction)
   ) {
     errors.push(
-      "supportAction must be one of: none, medicine_reminder, grocery_help, appointment_booking, emergency_contact."
+      `supportAction must be one of: ${joinAllowedValues(SUPPORT_ACTIONS)}.`
     );
   }
 

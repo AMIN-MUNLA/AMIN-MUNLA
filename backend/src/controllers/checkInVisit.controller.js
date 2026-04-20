@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const CheckInVisit = require("../models/checkInVisit.model");
 const Companion = require("../models/companion.model");
 const Senior = require("../models/senior.model");
-
-const visitTypeValues = ["call", "home_visit", "video_call"];
+const {
+  VISIT_TYPES,
+  joinAllowedValues,
+} = require("../constants/checkInVisit.constants");
 
 function parseBooleanQuery(value) {
   if (value === "true") {
@@ -98,10 +100,10 @@ exports.listCheckInVisits = async (req, res, next) => {
     }
 
     if (visitType) {
-      if (!visitTypeValues.includes(visitType)) {
+      if (!VISIT_TYPES.includes(visitType)) {
         return res.status(400).json({
           error: "Bad Request",
-          message: "visitType must be one of: call, home_visit, video_call.",
+          message: `visitType must be one of: ${joinAllowedValues(VISIT_TYPES)}.`,
         });
       }
       filters.visitType = visitType;

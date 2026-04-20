@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+const {
+  SUPPORT_ACTIONS,
+  VISIT_TYPES,
+} = require("../constants/checkInVisit.constants");
 
 const checkInVisitSchema = new mongoose.Schema(
   {
@@ -22,7 +26,7 @@ const checkInVisitSchema = new mongoose.Schema(
     },
     visitType: {
       type: String,
-      enum: ["call", "home_visit", "video_call"],
+      enum: VISIT_TYPES,
       required: true,
     },
     moodAfterVisit: {
@@ -39,13 +43,7 @@ const checkInVisitSchema = new mongoose.Schema(
     },
     supportAction: {
       type: String,
-      enum: [
-        "none",
-        "medicine_reminder",
-        "grocery_help",
-        "appointment_booking",
-        "emergency_contact",
-      ],
+      enum: SUPPORT_ACTIONS,
       default: "none",
     },
     followUpRequired: {
