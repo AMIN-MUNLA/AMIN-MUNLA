@@ -10,7 +10,10 @@ import {
   updateCheckInVisit,
 } from "./api/checkInVisitsApi";
 import CheckInVisitForm from "./components/CheckInVisitForm";
-import { VISIT_TYPE_OPTIONS } from "./constants/checkInVisitOptions";
+import {
+  SUPPORT_ACTION_OPTIONS,
+  VISIT_TYPE_OPTIONS,
+} from "./constants/checkInVisitOptions";
 import "./App.css";
 
 const INITIAL_FILTERS = {
@@ -42,6 +45,11 @@ function getName(value, fallback) {
     return value.fullName;
   }
   return fallback;
+}
+
+function getOptionLabel(options, value, fallback = "Unknown") {
+  const found = options.find((item) => item.value === value);
+  return found?.label || fallback;
 }
 
 function buildVisitFilters(filters) {
@@ -540,6 +548,8 @@ function App() {
                   <th>Senior</th>
                   <th>Companion</th>
                   <th>Type</th>
+                  <th>Duration</th>
+                  <th>Support Action</th>
                   <th>Mood</th>
                   <th>Follow-up</th>
                   <th>Actions</th>
@@ -551,7 +561,15 @@ function App() {
                     <td>{formatDate(visit.checkInDate)}</td>
                     <td>{getName(visit.seniorId, "Unknown senior")}</td>
                     <td>{getName(visit.companionId, "Unknown companion")}</td>
-                    <td>{visit.visitType}</td>
+                    <td>{getOptionLabel(VISIT_TYPE_OPTIONS, visit.visitType)}</td>
+                    <td>{visit.durationMinutes} min</td>
+                    <td>
+                      {getOptionLabel(
+                        SUPPORT_ACTION_OPTIONS,
+                        visit.supportAction,
+                        "None"
+                      )}
+                    </td>
                     <td>{visit.moodAfterVisit}/5</td>
                     <td>{visit.followUpRequired ? "Yes" : "No"}</td>
                     <td className="row-actions">
