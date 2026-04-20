@@ -86,6 +86,7 @@ This fullstack app helps families and volunteers log wellbeing check-ins for old
   - Review fixes applied:
     - Reference IDs checked before create/update (Senior + Companion)
     - Invalid `visitType` query returns `400`
+    - Mood filter validation improved (`minMood/maxMood` range + order check)
 - Day 5 complete:
   - React list view + controlled create form connected to real API
   - Loading/error states for create/list flow

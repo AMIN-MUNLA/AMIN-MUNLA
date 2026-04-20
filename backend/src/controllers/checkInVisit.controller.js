@@ -8,6 +8,9 @@ const {
   joinAllowedValues,
 } = require("../constants/checkInVisit.constants");
 
+const MIN_MOOD = 1;
+const MAX_MOOD = 5;
+
 function parseBooleanQuery(value) {
   if (value === "true") {
     return true;
@@ -16,6 +19,31 @@ function parseBooleanQuery(value) {
     return false;
   }
   return null;
+}
+
+function parseMoodQueryValue(value, fieldName) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return {
+      error: {
+        status: 400,
+        error: "Bad Request",
+        message: `${fieldName} must be numeric.`,
+      },
+    };
+  }
+
+  if (parsed < MIN_MOOD || parsed > MAX_MOOD) {
+    return {
+      error: {
+        status: 400,
+        error: "Bad Request",
+        message: `${fieldName} must be between ${MIN_MOOD} and ${MAX_MOOD}.`,
+      },
+    };
+  }
+
+  return { value: parsed };
 }
 
 function populateQuery(query) {
@@ -122,27 +150,44 @@ exports.listCheckInVisits = async (req, res, next) => {
 
     if (minMood !== undefined || maxMood !== undefined) {
       const moodFilter = {};
+      let parsedMinMood;
+      let parsedMaxMood;
+
       if (minMood !== undefined) {
-        const parsedMin = Number(minMood);
-        if (!Number.isFinite(parsedMin)) {
-          return res.status(400).json({
-            error: "Bad Request",
-            message: "minMood must be numeric.",
+        const minResult = parseMoodQueryValue(minMood, "minMood");
+        if (minResult.error) {
+          return res.status(minResult.error.status).json({
+            error: minResult.error.error,
+            message: minResult.error.message,
           });
         }
-        moodFilter.$gte = parsedMin;
+        parsedMinMood = minResult.value;
+        moodFilter.$gte = parsedMinMood;
       }
 
       if (maxMood !== undefined) {
-        const parsedMax = Number(maxMood);
-        if (!Number.isFinite(parsedMax)) {
-          return res.status(400).json({
-            error: "Bad Request",
-            message: "maxMood must be numeric.",
+        const maxResult = parseMoodQueryValue(maxMood, "maxMood");
+        if (maxResult.error) {
+          return res.status(maxResult.error.status).json({
+            error: maxResult.error.error,
+            message: maxResult.error.message,
           });
         }
-        moodFilter.$lte = parsedMax;
+        parsedMaxMood = maxResult.value;
+        moodFilter.$lte = parsedMaxMood;
       }
+
+      if (
+        parsedMinMood !== undefined &&
+        parsedMaxMood !== undefined &&
+        parsedMinMood > parsedMaxMood
+      ) {
+        return res.status(400).json({
+          error: "Bad Request",
+          message: "minMood cannot be greater than maxMood.",
+        });
+      }
+
       filters.moodAfterVisit = moodFilter;
     }
 
