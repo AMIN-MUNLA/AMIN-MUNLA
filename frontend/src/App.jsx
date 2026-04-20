@@ -10,6 +10,7 @@ import {
   updateCheckInVisit,
 } from "./api/checkInVisitsApi";
 import CheckInVisitForm from "./components/CheckInVisitForm";
+import { VISIT_TYPE_OPTIONS } from "./constants/checkInVisitOptions";
 import "./App.css";
 
 const INITIAL_FILTERS = {
@@ -335,9 +336,11 @@ function App() {
               onChange={handleFilterInputChange}
             >
               <option value="">All</option>
-              <option value="call">Call</option>
-              <option value="home_visit">Home Visit</option>
-              <option value="video_call">Video Call</option>
+              {VISIT_TYPE_OPTIONS.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
             </select>
           </label>
 

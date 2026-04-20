@@ -1,28 +1,20 @@
 import { useState } from "react";
-
-const visitTypeOptions = [
-  { value: "call", label: "Call" },
-  { value: "home_visit", label: "Home Visit" },
-  { value: "video_call", label: "Video Call" },
-];
-
-const supportActionOptions = [
-  { value: "none", label: "None" },
-  { value: "medicine_reminder", label: "Medicine Reminder" },
-  { value: "grocery_help", label: "Grocery Help" },
-  { value: "appointment_booking", label: "Appointment Booking" },
-  { value: "emergency_contact", label: "Emergency Contact" },
-];
+import {
+  DEFAULT_SUPPORT_ACTION,
+  DEFAULT_VISIT_TYPE,
+  SUPPORT_ACTION_OPTIONS,
+  VISIT_TYPE_OPTIONS,
+} from "../constants/checkInVisitOptions";
 
 function buildInitialFormState() {
   return {
     seniorId: "",
     companionId: "",
     checkInDate: "",
-    visitType: "call",
+    visitType: DEFAULT_VISIT_TYPE,
     moodAfterVisit: "3",
     durationMinutes: "30",
-    supportAction: "none",
+    supportAction: DEFAULT_SUPPORT_ACTION,
     followUpRequired: false,
     followUpDueDate: "",
     notes: "",
@@ -65,10 +57,10 @@ function buildFormStateFromVisit(visit) {
     seniorId: getObjectId(visit?.seniorId),
     companionId: getObjectId(visit?.companionId),
     checkInDate: formatDateInputValue(visit?.checkInDate),
-    visitType: visit?.visitType || "call",
+    visitType: visit?.visitType || DEFAULT_VISIT_TYPE,
     moodAfterVisit: String(visit?.moodAfterVisit ?? 3),
     durationMinutes: String(visit?.durationMinutes ?? 30),
-    supportAction: visit?.supportAction || "none",
+    supportAction: visit?.supportAction || DEFAULT_SUPPORT_ACTION,
     followUpRequired: Boolean(visit?.followUpRequired),
     followUpDueDate: formatDateInputValue(visit?.followUpDueDate),
     notes: visit?.notes || "",
@@ -246,7 +238,7 @@ function CheckInVisitForm({
             onChange={handleInputChange}
             required
           >
-            {visitTypeOptions.map((item) => (
+            {VISIT_TYPE_OPTIONS.map((item) => (
               <option key={item.value} value={item.value}>
                 {item.label}
               </option>
@@ -287,7 +279,7 @@ function CheckInVisitForm({
             value={formState.supportAction}
             onChange={handleInputChange}
           >
-            {supportActionOptions.map((item) => (
+            {SUPPORT_ACTION_OPTIONS.map((item) => (
               <option key={item.value} value={item.value}>
                 {item.label}
               </option>
