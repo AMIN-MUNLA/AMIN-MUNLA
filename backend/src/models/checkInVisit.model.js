@@ -15,6 +15,10 @@ const checkInVisitSchema = new mongoose.Schema(
     checkInDate: {
       type: Date,
       required: true,
+      validate: {
+        validator: (value) => value <= new Date(),
+        message: "checkInDate cannot be in the future.",
+      },
     },
     visitType: {
       type: String,
