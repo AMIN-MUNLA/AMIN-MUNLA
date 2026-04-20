@@ -72,10 +72,14 @@ This fullstack app helps families and volunteers log wellbeing check-ins for old
 - Day 4: relational + custom stats endpoints
 - Day 5: React list + controlled create form
 - Day 6: React update and delete actions with confirmation and edit mode
+- Day 7: React filter controls + mood summary dashboard using custom endpoint
 
 ## Security
 - Secrets are not committed to Git
 - Environment variables are handled through `.env` files
+
+## Presentation Notes
+- Day 7 Zoom checklist: `docs/day7-demo-checklist.md`
 
 ## Author
 - MHD Amin Munla
