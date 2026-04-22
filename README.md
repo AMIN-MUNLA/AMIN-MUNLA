@@ -5,7 +5,7 @@ Senior Companion Check-In Planner helps family members and volunteers track chec
 ## Day 1 goals completed
 - Chosen a personal, non-generic domain and frozen MVP scope.
 - Set up React (Vite) frontend and Express backend.
-- Added one-command startup with `concurrently`.
+- Added one-command startup script.
 - Added `.env.example` files and secret-safe `.gitignore`.
 - Drafted ERD and validation targets in `docs/erd.md`.
 - Created backend Router -> Controller -> Model skeleton for `CheckInVisit`.
@@ -31,6 +31,7 @@ Senior Companion Check-In Planner helps family members and volunteers track chec
    - `cd .. && npm install`
 3. Start both apps:
    - `npm run dev`
+   - This opens two terminals on Windows: one for backend and one for frontend.
 
 Frontend default URL: `http://localhost:5173`  
 Backend health URL: `http://localhost:5000/api/health`
