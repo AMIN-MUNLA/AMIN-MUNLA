@@ -436,8 +436,13 @@ async function run() {
   }
 
   const mongoUri = process.env.MONGODB_URI;
-  if (!mongoUri) {
-    throw new Error("MONGODB_URI is missing. Add it in backend/.env before seeding.");
+  const isMissingMongoUri = !mongoUri || mongoUri.trim().length === 0;
+  const hasPlaceholderMongoUri = !!mongoUri && /<[^>]+>/.test(mongoUri);
+
+  if (isMissingMongoUri || hasPlaceholderMongoUri) {
+    throw new Error(
+      "MONGODB_URI is not configured. Add your real MongoDB Atlas URI in backend/.env before seeding."
+    );
   }
 
   await mongoose.connect(mongoUri);
