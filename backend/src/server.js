@@ -7,12 +7,7 @@ const PORT = Number(process.env.PORT) || 5000;
 const MONGODB_URI = process.env.MONGODB_URI ? process.env.MONGODB_URI.trim() : "";
 
 function isPlaceholderMongoUri(uri) {
-  return (
-    uri.includes("<username>") ||
-    uri.includes("<password>") ||
-    uri.includes("<cluster>") ||
-    uri.includes("<database>")
-  );
+  return /<[^>]+>/.test(uri);
 }
 
 async function connectToDatabase() {

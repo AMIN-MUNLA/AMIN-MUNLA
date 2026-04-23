@@ -5,7 +5,9 @@ function requireDatabase(req, res, next) {
     return next();
   }
 
-  const hasUri = Boolean(process.env.MONGODB_URI);
+  const rawUri = process.env.MONGODB_URI ? process.env.MONGODB_URI.trim() : "";
+  const hasPlaceholder = /<[^>]+>/.test(rawUri);
+  const hasUri = Boolean(rawUri) && !hasPlaceholder;
 
   return res.status(503).json({
     error: "Service Unavailable",
