@@ -33,6 +33,8 @@ Senior Companion Check-In Planner helps family members and volunteers track chec
    - `npm run dev`
    - This opens two terminals on Windows: one for backend and one for frontend.
 
+If `MONGODB_URI` is not configured yet, backend still starts and data endpoints return `503 Service Unavailable` with a clear message.
+
 Frontend default URL: `http://localhost:5173`  
 Backend health URL: `http://localhost:5000/api/health`
 
