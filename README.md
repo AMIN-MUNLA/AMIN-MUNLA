@@ -2,47 +2,74 @@
 
 Senior Companion Check-In Planner helps family members and volunteers track check-ins with older adults so they can follow wellbeing trends and catch support needs early.
 
-## Day 1 goals completed
-- Chosen a personal, non-generic domain and frozen MVP scope.
-- Set up React (Vite) frontend and Express backend.
-- Added one-command startup script.
-- Added `.env.example` files and secret-safe `.gitignore`.
-- Drafted ERD and validation targets in `docs/erd.md`.
-- Created backend Router -> Controller -> Model skeleton for `CheckInVisit`.
+## Stack
+- Frontend: React (Vite)
+- Backend: Express.js
+- Database: MongoDB Atlas (Mongoose)
 
-## Scope guardrails (strict)
-- Build only DA219B required features.
-- No authentication in v1.
-- No payments, notifications, chat, or admin dashboard.
-- Prioritize realistic seed data, explainability, and deployability.
+## Completed Scope (Day 1-5)
+- 3 collections with relations: `Senior`, `Companion`, `CheckInVisit`.
+- Full CRUD for `CheckInVisit`.
+- 2 relational endpoints:
+  - `GET /api/seniors/:id/check-ins`
+  - `GET /api/companions/:id/check-ins`
+- 1 custom stats endpoint:
+  - `GET /api/stats/mood-summary`
+- Consistent API error contract:
+  - `{ "error": string, "message": string, "details": any }`
+- React UI with:
+  - 3 components (`VisitsDashboard`, `VisitForm`, `VisitList`)
+  - loading and error states
+  - controlled form
+  - edit/delete confirmation flow
+  - search by senior name + filter by visit type
+  - auto-refresh using `setInterval` with cleanup in `useEffect`
 
-## Project structure
-- `frontend/` React (Vite) client.
-- `backend/` Express API.
-- `docs/` ERD and architecture notes.
+## Project Structure
+- `frontend/` React app
+- `backend/` Express API
+- `docs/` ERD, report template, seminar notes
 
-## Quick start (under 5 minutes)
+## Run in Under 5 Minutes
 1. Copy environment templates:
    - `backend/.env.example` -> `backend/.env`
    - `frontend/.env.example` -> `frontend/.env`
-2. Install dependencies:
-   - `cd frontend && npm install`
-   - `cd ../backend && npm install`
-   - `cd .. && npm install`
-3. Start both apps:
+2. Set real Atlas URI in `backend/.env`:
+   - `MONGODB_URI=your_atlas_connection_string`
+3. Install dependencies:
+   - `npm install`
+   - `npm install --prefix backend`
+   - `npm install --prefix frontend`
+4. Seed realistic data:
+   - `npm run seed --prefix backend`
+5. Start app:
    - `npm run dev`
-   - This opens two terminals on Windows: one for backend and one for frontend.
 
-If `MONGODB_URI` is not configured yet, backend still starts and data endpoints return `503 Service Unavailable` with a clear message.
+URLs:
+- Frontend: `http://localhost:5173`
+- Backend health: `http://localhost:5000/api/health`
 
-Frontend default URL: `http://localhost:5173`  
-Backend health URL: `http://localhost:5000/api/health`
+## API Endpoints
 
-## Day-by-day plan
-- Day 1: Setup + scope + ERD (done)
-- Day 2: MongoDB schemas + realistic seed data
-- Day 3-5: API CRUD + relational + custom endpoints
-- Day 6-7: React CRUD UI + loading/error + interactive feature
-- Day 8: Deploy + production config
-- Day 9: Report writing
-- Day 10: Seminar live-change drills
+### Check-In Visits (CRUD)
+- `GET /api/check-in-visits`
+- `GET /api/check-in-visits/:id`
+- `POST /api/check-in-visits`
+- `PUT /api/check-in-visits/:id`
+- `DELETE /api/check-in-visits/:id`
+
+### Relational
+- `GET /api/seniors/:id/check-ins`
+- `GET /api/companions/:id/check-ins`
+
+### Custom Stats
+- `GET /api/stats/mood-summary`
+- Optional query params:
+  - `seniorId=<objectId>`
+  - `visitType=call|home_visit|video_call`
+
+## Notes for Seminar
+- If `MONGODB_URI` is missing, data endpoints return `503` with a clear message.
+- Health endpoint shows DB state in `database` field.
+- Report template: `docs/report-template.md`
+- Live-change practice script: `docs/seminar-drill.md`
