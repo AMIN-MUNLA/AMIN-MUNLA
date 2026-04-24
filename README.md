@@ -72,5 +72,7 @@ URLs:
 - If `MONGODB_URI` is missing, data endpoints return `503` with a clear message.
 - Health endpoint shows DB state in `database` field.
 - Report template: `docs/report-template.md`
+- Final report draft: `docs/report-final.md`
 - Live-change practice script: `docs/seminar-drill.md`
 - Final pass checklist (Day 6): `docs/day6-final-pass-checklist.md`
+- Teacher pass matrix: `docs/teacher-pass-matrix.md`
