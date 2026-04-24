@@ -73,3 +73,4 @@ URLs:
 - Health endpoint shows DB state in `database` field.
 - Report template: `docs/report-template.md`
 - Live-change practice script: `docs/seminar-drill.md`
+- Final pass checklist (Day 6): `docs/day6-final-pass-checklist.md`
