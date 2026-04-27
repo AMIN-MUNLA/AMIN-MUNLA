@@ -48,6 +48,22 @@ I simplified scripts:
 
 This gave stable startup/build behavior on my environment.
 
+### Final issue before submission: app running but database not connected
+At the final stage, backend and frontend could start, but database features were still blocked.
+
+Root cause:
+- `MONGODB_URI` in `backend/.env` was still a placeholder, not a real Atlas connection string.
+
+Observed behavior:
+- `GET /api/health` returned `200` with `database: "disconnected"`.
+- Data endpoints returned `503` with a clear JSON error message.
+- `npm run seed --prefix backend` failed until a real URI was provided.
+
+How this was handled:
+- Kept `.env` out of GitHub for security.
+- Used `.env.example` in repository and documented required local setup.
+- Added clear startup/seed error messages so the failure is explicit and easy to explain in seminar.
+
 ## DA219B Requirements Mapping
 - **3 collections with relations:** `Senior`, `Companion`, `CheckInVisit`.
 - **Full CRUD (main entity):** complete CRUD for `CheckInVisit`.
