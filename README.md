@@ -1,57 +1,60 @@
 # Senior Companion Check-In Planner (DA219B)
 
-Senior Companion Check-In Planner helps family members and volunteers track check-ins with older adults so they can follow wellbeing trends and catch support needs early.
+## Problem Statement
+Older adults often receive check-ins from family members, volunteers, and caregivers, but follow-up information is usually scattered between phone calls and personal notes.  
+This project provides one simple system to log each check-in, track mood after each visit, and see whether medication was taken.
 
-## Stack
-- Frontend: React (Vite)
-- Backend: Express.js
-- Database: MongoDB Atlas (Mongoose)
+## Stack (Required by DA219B)
+- Frontend: React + Vite
+- Backend: Node.js + Express
+- Database: MongoDB Atlas + Mongoose
 
-## Completed Scope (Day 1-5)
-- 3 collections with relations: `Senior`, `Companion`, `CheckInVisit`.
-- Full CRUD for `CheckInVisit`.
+## Scope Delivered
+- 3 related collections: `Senior`, `Companion`, `CheckInVisit`
+- Full CRUD for main entity `CheckInVisit`
 - 2 relational endpoints:
   - `GET /api/seniors/:id/check-ins`
   - `GET /api/companions/:id/check-ins`
-- 1 custom stats endpoint:
+- 1 custom endpoint:
   - `GET /api/stats/mood-summary`
 - Consistent API error contract:
   - `{ "error": string, "message": string, "details": any }`
-- React UI with:
+- React UI requirements covered:
   - 3 components (`VisitsDashboard`, `VisitForm`, `VisitList`)
-  - loading and error states
+  - loading + error states
   - controlled form
-  - edit/delete confirmation flow
+  - edit/delete with confirmation
   - search by senior name + filter by visit type
-  - auto-refresh using `setInterval` with cleanup in `useEffect`
+  - auto-refresh with `setInterval` and cleanup in `useEffect`
 
 ## Project Structure
-- `frontend/` React app
-- `backend/` Express API
-- `docs/` ERD, report template, seminar notes
+- `frontend/`: React app
+- `backend/`: Express API
+- `docs/`: ERD, report, seminar notes
 
-## Run in Under 5 Minutes
-1. Copy environment templates:
-   - `backend/.env.example` -> `backend/.env`
-   - `frontend/.env.example` -> `frontend/.env`
-2. Set real Atlas URI in `backend/.env`:
-   - `MONGODB_URI=your_atlas_connection_string`
-3. Install dependencies:
+## Quick Setup (Under 5 Minutes)
+1. Open terminal in project root:
+   - `cd "C:\Users\aminm\Documents\New project\da219b-senior-checkin-planner"`
+2. Create env files:
+   - copy `backend/.env.example` to `backend/.env`
+   - copy `frontend/.env.example` to `frontend/.env`
+3. Set real Atlas URI in `backend/.env`:
+   - `MONGODB_URI=your_real_atlas_connection_string`
+4. Install dependencies:
    - `npm install`
    - `npm install --prefix backend`
    - `npm install --prefix frontend`
-4. Seed realistic data:
+5. Seed realistic data:
    - `npm run seed --prefix backend`
-5. Start app:
+6. Run app:
    - `npm run dev`
-
-URLs:
-- Frontend: `http://localhost:5173`
-- Backend health: `http://localhost:5000/api/health`
+7. Verify:
+   - Health: `http://localhost:5000/api/health` (should show `"database":"connected"`)
+   - Frontend: `http://localhost:5173` (or next port if 5173 is busy)
 
 ## API Endpoints
 
-### Check-In Visits (CRUD)
+### CheckInVisit CRUD
 - `GET /api/check-in-visits`
 - `GET /api/check-in-visits/:id`
 - `POST /api/check-in-visits`
@@ -59,20 +62,20 @@ URLs:
 - `DELETE /api/check-in-visits/:id`
 
 ### Relational
+- `GET /api/seniors`
+- `GET /api/companions`
 - `GET /api/seniors/:id/check-ins`
 - `GET /api/companions/:id/check-ins`
 
-### Custom Stats
+### Custom Statistics
 - `GET /api/stats/mood-summary`
 - Optional query params:
   - `seniorId=<objectId>`
   - `visitType=call|home_visit|video_call`
 
-## Notes for Seminar
-- If `MONGODB_URI` is missing, data endpoints return `503` with a clear message.
-- Health endpoint shows DB state in `database` field.
-- Report template: `docs/report-template.md`
-- Final report draft: `docs/report-final.md`
-- Live-change practice script: `docs/seminar-drill.md`
-- Final pass checklist (Day 6): `docs/day6-final-pass-checklist.md`
-- Teacher pass matrix: `docs/teacher-pass-matrix.md`
+## Seminar Notes
+- If `MONGODB_URI` is missing/placeholder, data endpoints return `503` with clear message.
+- Health route always responds and shows DB state in `database`.
+- ERD: `docs/erd.md`
+- Final report: `docs/report-final.md`
+- Drill script: `docs/seminar-drill.md`

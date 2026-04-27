@@ -1,91 +1,127 @@
-# DA219B Lab Report (Final Draft)
+# DA219B Fullstack Lab Report
+**Student:** MHD Amin Munla  
+**Project:** Senior Companion Check-In Planner  
+**Course:** DA219B
 
-## Project Summary
-My project is **Senior Companion Check-In Planner**.  
-It helps family members and volunteers track check-ins with older adults and follow wellbeing trends.
+## 1) System Overview (5-8 lines)
+Senior Companion Check-In Planner is a simple fullstack web app for tracking check-ins with older adults.  
+The frontend is built with React (Vite), and the backend is built with Express and Mongoose.  
+The app stores three related collections: `Senior`, `Companion`, and `CheckInVisit`.  
+`CheckInVisit` is the main entity and connects to both other collections using ObjectId references.  
+Users can create, read, update, and delete visits from one dashboard.  
+The UI also supports search by senior name, filter by visit type, and auto-refresh for updated data.  
+The API uses one consistent error contract and clear status codes for easier debugging and seminar explanation.
 
-I used the required stack:
-- HTML/CSS/JavaScript
-- React (Vite) for frontend
-- Node.js + Express for backend
-- MongoDB Atlas with Mongoose for database
+## 2) Database Design
+The database design follows the lab requirement of three collections with references.
 
-The main entity is `CheckInVisit`, connected to `Senior` and `Companion` using ObjectId references.
+- **Senior**: stores older adult profile data (`fullName`, `age`, `city`, `contactPhone`, `supportLevel`).
+- **Companion**: stores family/volunteer/caregiver info (`fullName`, `relationshipType`, `phone`, `preferredLanguage`).
+- **CheckInVisit**: stores each visit record (`seniorId`, `companionId`, `checkInDate`, `visitType`, `moodAfterVisit`, `medicationTaken`, `notes`).
 
-## Challenges and Solutions
+`CheckInVisit.seniorId` references `Senior._id` and `CheckInVisit.companionId` references `Companion._id`.  
+This creates one-to-many relationships:
+- one Senior -> many CheckInVisit documents
+- one Companion -> many CheckInVisit documents
 
-### Challenge 1: Keep architecture clean and easy to explain
-At first, it was easy to mix route logic, business logic, and data access in one file.  
-That becomes hard to explain in seminar.
+ERD reference: `docs/erd.md`
 
-**Solution:**  
-I used a strict `Router -> Controller -> Model` structure:
-- Routes only define endpoint paths.
-- Controllers handle request/response logic.
-- Models define schema and validation.
+## 3) API Endpoint Examples
 
-This made the backend easier to maintain and easier to explain live.
+### Endpoint A: Create visit
+- **Method:** `POST`
+- **Route:** `/api/check-in-visits`
+- **Request body (example):**
 
-### Challenge 2: Reliable error handling for all endpoints
-Without a standard pattern, API errors become inconsistent and hard for frontend to handle.
-
-**Solution:**  
-I enforced one consistent error contract in all endpoints:
 ```json
-{ "error": "string", "message": "string", "details": "any" }
+{
+  "seniorId": "680d5ed2875f68d7d4c12345",
+  "companionId": "680d5ed2875f68d7d4c67890",
+  "checkInDate": "2026-04-24T10:30:00.000Z",
+  "visitType": "home_visit",
+  "moodAfterVisit": 4,
+  "medicationTaken": true,
+  "notes": "Walked for 20 minutes and checked medication box."
+}
 ```
-I also used clear status codes (`400`, `404`, `409`, `500`, and `503` when DB config is missing).
 
-Result: frontend error handling is simpler and API behavior is predictable.
+- **Example response (201):**
 
-### Challenge 3: Windows EPERM issues during dev/build
-On Windows, process spawn errors (`EPERM`) appeared with some dev tooling.
+```json
+{
+  "_id": "680d611b875f68d7d4c9ab01",
+  "seniorId": {
+    "_id": "680d5ed2875f68d7d4c12345",
+    "fullName": "Ingrid Andersson",
+    "city": "Malmo",
+    "supportLevel": "medium"
+  },
+  "companionId": {
+    "_id": "680d5ed2875f68d7d4c67890",
+    "fullName": "Sara Nilsson",
+    "relationshipType": "family",
+    "preferredLanguage": "Swedish"
+  },
+  "checkInDate": "2026-04-24T10:30:00.000Z",
+  "visitType": "home_visit",
+  "moodAfterVisit": 4,
+  "medicationTaken": true,
+  "notes": "Walked for 20 minutes and checked medication box."
+}
+```
 
-**Solution:**  
-I simplified scripts:
-- backend dev runs with `node src/server.js`
-- frontend Vite commands use `--configLoader native`
+### Endpoint B: Update visit
+- **Method:** `PUT`
+- **Route:** `/api/check-in-visits/:id`
+- **Request body (example):**
 
-This gave stable startup/build behavior on my environment.
+```json
+{
+  "visitType": "video_call",
+  "moodAfterVisit": 5,
+  "medicationTaken": true,
+  "notes": "Follow-up call, mood improved after family support."
+}
+```
 
-### Final issue before submission: app running but database not connected
-At the final stage, backend and frontend could start, but database features were still blocked.
+- **Example response (200):**
 
-Root cause:
-- `MONGODB_URI` in `backend/.env` was still a placeholder, not a real Atlas connection string.
+```json
+{
+  "_id": "680d611b875f68d7d4c9ab01",
+  "visitType": "video_call",
+  "moodAfterVisit": 5,
+  "medicationTaken": true,
+  "notes": "Follow-up call, mood improved after family support."
+}
+```
 
-Observed behavior:
-- `GET /api/health` returned `200` with `database: "disconnected"`.
-- Data endpoints returned `503` with a clear JSON error message.
-- `npm run seed --prefix backend` failed until a real URI was provided.
+## 4) Challenge, Solution, and Learning
+### Challenge
+During final testing, the app started locally but data endpoints failed because database configuration was incomplete.
 
-How this was handled:
-- Kept `.env` out of GitHub for security.
-- Used `.env.example` in repository and documented required local setup.
-- Added clear startup/seed error messages so the failure is explicit and easy to explain in seminar.
+### Solution
+I added explicit checks for missing or placeholder `MONGODB_URI` values and returned clear `503` messages when the DB is unavailable.  
+I also improved seed/startup messages so configuration problems are obvious before seminar.
 
-## DA219B Requirements Mapping
-- **3 collections with relations:** `Senior`, `Companion`, `CheckInVisit`.
-- **Full CRUD (main entity):** complete CRUD for `CheckInVisit`.
-- **2 relational endpoints:**
-  - `GET /api/seniors/:id/check-ins`
-  - `GET /api/companions/:id/check-ins`
-- **1 custom endpoint:** `GET /api/stats/mood-summary`
-- **Realistic seed data:** implemented in backend seed script (not placeholder names).
-- **React UI requirements:** split components, loading/error states, controlled form, edit/delete actions.
-- **Interactive feature:** search by senior name + filter by visit type.
-- **Auto-refresh:** `setInterval` with cleanup in `useEffect`.
+### What I learned
+I learned that clear error messaging and predictable API behavior are as important as core CRUD logic.  
+This reduced debugging time and made the system easier to explain during live defense.
 
-## What I Would Do Differently
-If I had more time, I would:
-1. Add authentication/roles (family vs volunteer).
-2. Add automated frontend tests for key CRUD flows.
+## 5) Feature Iteration Evidence (Real Commits)
+I iterated the same "database configuration reliability" feature in two steps:
 
-I kept this version intentionally simple and explainable to match seminar requirements.
+1. `72dc23e`  
+   Added placeholder URI detection so angle-bracket Atlas examples are treated as not configured.
 
-## Extra Libraries Used
+2. `a646bde`  
+   Improved seeding feedback with a clear error message when Atlas URI is still placeholder.
+
+This shows the feature was first implemented, then improved based on testing feedback.
+
+## 6) Extra Libraries Used
 - Backend: `express`, `mongoose`, `cors`, `dotenv`
 - Frontend: `react`, `react-dom`, `vite`
-- Dev: `eslint`, `nodemon` (optional dev script)
+- Dev tooling: `nodemon` (optional script), `eslint`
 
-I did not add heavy frameworks to keep the project easy to run and explain.
+No heavy extra framework was added, to keep the solution simple and easy to explain.
